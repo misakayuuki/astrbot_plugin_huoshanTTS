@@ -5,6 +5,7 @@ import json
 import requests
 import aiohttp
 import asyncio
+import re
 from astrbot.core.provider.provider import TTSProvider
 from astrbot.core.provider.entites import ProviderType
 from astrbot.core.provider.register import register_provider_adapter
@@ -35,10 +36,24 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
         self.chosen_cluster = provider_config.get("cluster", "volcano_icl")
         self.host = "openspeech.bytedance.com"
         self.api_url = f"https://{self.host}/api/v1/tts"
-        
+    
+    def remove_complex_emoticons(self,text):
+        pattern = r"""
+                [a-zA-Z]                # 匹配所有英文字母
+                |                       # 或
+                \([^()]+\)              # 匹配括号内的复杂颜表情
+                |                       # 或
+                [^\u4e00-\u9fff，。？！、]  # 匹配非中文、非标点符号、非空格的字符
+        """
+        regex = re.compile(pattern, re.VERBOSE)
+        cleaned_text = regex.sub('', text)
+        return cleaned_text
+
+
     async def get_audio(self, text: str) -> str:
-        path = f'data/temp/openai_tts_api_{uuid.uuid4()}.wav'
+        path = f'data/temp/openai_tts_api_{uuid.uuid4()}.mp3'
         header = {"Authorization": f"Bearer;{self.chosen_access_token}"}
+        clean_text = self.remove_complex_emoticons(text)
         async with aiohttp.ClientSession(headers=header, connector=aiohttp.TCPConnector(ssl=False)) as session:
             request_json = {
                 "app": {
@@ -51,14 +66,14 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
                 },
                 "audio": {
                     "voice_type": self.voice,
-                    "encoding": "wav",
+                    "encoding": "mp3",
                     "speed_ratio": 1.0,
                     "volume_ratio": 1.0,
                     "pitch_ratio": 1.0,
                 },
                 "request": {
                     "reqid": str(uuid.uuid4()),
-                    "text": text,
+                    "text": clean_text,
                     "text_type": "plain",
                     "operation": "query",
                     "with_frontend": 1,
