@@ -21,7 +21,8 @@ from astrbot.core.provider.register import register_provider_adapter
     "access_token": "your token",
     "voice_type": "voice id",
     "app_id": "appid",
-    "cluster": "volcano_icl"
+    "cluster": "volcano_icl",
+    "speed_ratio": 0.9
 },provider_display_name = "Huoshan TTS")
 class ProviderHUOSHANTTSAPI(TTSProvider):
     def __init__(
@@ -36,6 +37,7 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
         self.chosen_cluster = provider_config.get("cluster", "volcano_icl")
         self.host = "openspeech.bytedance.com"
         self.api_url = f"https://{self.host}/api/v1/tts"
+        self.speed_ratio = provider_config.get("speed_ratio", 0.9)
     
     def remove_complex_emoticons(self,text):
         pattern = r"""
@@ -67,9 +69,7 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
                 "audio": {
                     "voice_type": self.voice,
                     "encoding": "mp3",
-                    "speed_ratio": 1.0,
-                    "volume_ratio": 1.0,
-                    "pitch_ratio": 1.0,
+                    "speed_ratio": self.speed_ratio
                 },
                 "request": {
                     "reqid": str(uuid.uuid4()),
