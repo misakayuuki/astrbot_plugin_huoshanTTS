@@ -71,8 +71,8 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
                 data=json.dumps(request_json)
             )as response:
                 with open(path, 'wb') as f:
-                    async for chunk in response.iter_bytes(chunk_size=1024):
-                        f.write(chunk)
+                    async for chunk in response.json()["data"]:
+                        f.write(base64.b64decode(chunk))
         return path
 
 
