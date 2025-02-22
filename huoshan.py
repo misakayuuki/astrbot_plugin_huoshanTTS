@@ -16,7 +16,12 @@ from astrbot.core.provider.register import register_provider_adapter
 
 
 
-@register_provider_adapter("huoshan_tts_api", "HuoShan TTS API", provider_type=ProviderType.TEXT_TO_SPEECH)
+@register_provider_adapter("huoshan_tts_api", "HuoShan TTS API", provider_type=ProviderType.TEXT_TO_SPEECH,default_config_tmpl = {
+    "access_token": "your token",
+    "voice_type": "voice id",
+    "app_id": "appid",
+    "cluster": "volcano_icl"
+},provider_display_name = "Huoshan TTS")
 class ProviderHUOSHANTTSAPI(TTSProvider):
     def __init__(
         self, 
