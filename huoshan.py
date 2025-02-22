@@ -39,7 +39,7 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
     async def get_audio(self, text: str) -> str:
         path = f'data/temp/openai_tts_api_{uuid.uuid4()}.wav'
         header = {"Authorization": f"Bearer;{self.chosen_access_token}"}
-        async with aiohttp.ClientSession(headers=header) as session:
+        async with aiohttp.ClientSession(headers=header, connector=aiohttp.TCPConnector(ssl=False)) as session:
             request_json = {
                 "app": {
                     "appid": self.chosen_app_id,
@@ -70,9 +70,11 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
                 self.api_url,
                 data=json.dumps(request_json)
             )as response:
+                print(f"resp body: \n{response.json()}")
                 with open(path, 'wb') as f:
-                    chunk = await response.json()["data"]
-                    f.write(base64.b64decode(chunk))
+                    chunk = await response.json()
+                    audio_data = chunk["data"]
+                    f.write(base64.b64decode(audio_data))
         return path
 
 
