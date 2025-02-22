@@ -38,7 +38,7 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
         
     async def get_audio(self, text: str) -> str:
         path = f'data/temp/openai_tts_api_{uuid.uuid4()}.wav'
-        header = {"Authorization": f"Bearer;{self.chosen_api_key}"}
+        header = {"Authorization": f"Bearer;{self.chosen_access_token}"}
         async with aiohttp.ClientSession(headers=header) as session:
             request_json = {
                 "app": {
