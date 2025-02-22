@@ -34,7 +34,7 @@ class ProviderHUOSHANTTSAPI(TTSProvider):
         self.chosen_app_id = provider_config.get("app_id", "")
         self.chosen_cluster = provider_config.get("cluster", "volcano_icl")
         self.host = "openspeech.bytedance.com"
-        self.api_url = f"https://{host}/api/v1/tts"
+        self.api_url = f"https://{self.host}/api/v1/tts"
         
     async def get_audio(self, text: str) -> str:
         path = f'data/temp/openai_tts_api_{uuid.uuid4()}.wav'
