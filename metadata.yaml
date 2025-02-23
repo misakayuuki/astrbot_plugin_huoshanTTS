@@ -1,6 +1,6 @@
 name: astrbot_plugin_huoshanTTS # 这是你的插件的唯一识别名。
-desc: 添加火山声音复刻 api支持。 # 插件简短描述
+desc: 添加火山声音复刻 api支持。在服务提供商里添加即可使用 # 插件简短描述
 help: https://www.volcengine.com/docs/6561/1305191#java # 插件的帮助信息
-version: v1.0.0 # 插件版本号。格式：v1.1.1 或者 v1.1
+version: v1.0.1 # 插件版本号。格式：v1.1.1 或者 v1.1
 author: misa想变木苒苒 # 作者
 repo: https://github.com/misakayuuki/astrbot_plugin_huoshanTTS/tree/master # 插件的仓库地址
